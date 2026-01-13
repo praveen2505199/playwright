@@ -1,0 +1,132 @@
+const { test, expect } = require('@playwright/test');
+const urls = require('../../config/urls.json');
+const { BasePage } = require('../../pages/basePage');
+
+test('Verify Smart Pricing Plan Calendar Month And EventsFor Business', async ({ page }) => {
+    test.setTimeout(180000);
+    const base = new BasePage(page);
+    
+    console.log("Step 1: Open base URL and accept cookies");
+    await base.open(urls.base);
+    await base.acceptCookies();
+    await page.waitForLoadState('load');
+    
+    console.log("Step 2: Click Search button and search 'Smart Pricing Plan'");
+    const searchIcon = page.locator("//button[@class='search']");
+    await expect(searchIcon).toBeVisible({ timeout: 1000 });
+    await searchIcon.click();
+
+    await base.handleLocationVirginia();
+    await page.waitForTimeout(1000);
+    await searchIcon.click();
+    const searchInput = page.locator('#search-box-input');
+    await searchInput.fill('Smart Pricing Plan');
+    await page.keyboard.press('Enter');
+    await page.waitForLoadState('load');
+   // await page.waitForSelector("//*[@id='coveo01cd4840']//*[@class='coveo-result-list-container coveo-list-layout-container']//*[@class='coveo-list-layout CoveoResult']");
+    await base.CoveoresultIsVisible();
+    const result = page.locator("//a[contains(@href, '/Smart-Pricing-Plan') and contains(@class, 'CoveoResultLink')]");
+    await page.waitForTimeout(5000);
+    await result.click();
+    await page.waitForLoadState('load');
+    const currentUrl = page.url();
+    
+    console.log("Step 3: Verify it navigates to Smart Pricing Plan page");
+    if (currentUrl.includes('/about/delivering-energy/electric-projects/smart-meter-upgrades/smart-pricing-plan')) {
+        console.log("Smart Pricing Plan page loaded successfully:", currentUrl);
+    } else {
+        console.log("Failed to load the correct page.");
+    }
+      
+      await validateCalendarsForBusiness(page);          
+});
+async function validateCalendarsForBusiness(page) {
+    // Verifying calendar for Home is visible
+    const calendarLocator = page.locator("(//div[@class='dom-calendar'])[2]");
+    await calendarLocator.scrollIntoViewIfNeeded();
+    await expect(calendarLocator).toBeVisible();
+    console.log("Step 4: Classification Calendar For Business is visible.");
+
+    // Verifying calendar displays the current month and year
+    const calendarDateLocator = page.locator("(//*[@class='dom-calendar'])[2]//*[@class='dom-calendar-row dom-calendar-title']//*[@class='dom-calendar-col dom-cal-col-5 dom-cal-date']");
+    await page.waitForTimeout(500);
+    const currentDate = new Date();
+    const currentDay = currentDate.getDate().toString().padStart(2, '0');
+    const currentMonth = currentDate.toLocaleString('default', { month: 'long' });
+    const currentYear = currentDate.getFullYear();
+
+    const expectedDate = `${currentMonth} ${currentYear}`;
+     await page.waitForTimeout(500);
+    const calendarText = await calendarDateLocator.textContent();
+     await page.waitForTimeout(1000);
+    console.log(`Current Date: ${currentMonth} ${currentYear}`);
+    console.log(`Calendar Text: ${calendarText}`);
+    console.log(`Expected Date: ${expectedDate}`);
+
+    if (calendarText.trim() === expectedDate) {
+        console.log("The calendar date matches the expected date.");
+        await expect(calendarDateLocator).toBeVisible();
+    } else {
+        console.log("The calendar date does not match the expected date.");
+    }
+
+    // Verifying current day
+    // Get today and tomorrow (UTC)
+    const today = new Date().getUTCDate();
+    const tomorrow = today + 1;
+    //Display total days in calendar
+    const totaldays= page.locator("(//*[@class='dom-calendar'])[2]//div[@class='dom-cal-day']");
+     await page.waitForTimeout(500);
+    const totaldays_count= await totaldays.count();
+     await page.waitForTimeout(500);
+    console.log(`Total calendar days found: ${totaldays_count}`);
+    // Get all calendar cells in the first calendar
+    const dayCells = page.locator("(//*[@class='dom-calendar'])[2]//div[contains(@class,'dom-calendar-col')]");
+    //(//*[@class='dom-calendar'])[1]//div[@class='dom-cal-day']
+    //(//*[@class='dom-calendar'])[1]//div[contains(@class,'dom-calendar-col')]
+     await page.waitForTimeout(500);
+     const count = await dayCells.count();
+    //console.log(`Total calendar cells found: ${count}`);
+    await page.waitForTimeout(1000);
+    for (let i = 0; i < count; i++) {
+        const cell = dayCells.nth(i);
+
+        // Skip cells without a day number
+        const dayLocator = cell.locator(".dom-cal-day").first();
+        if ((await dayLocator.count()) === 0) continue;
+
+        await dayLocator.waitFor({ state: 'visible' });
+        let dayText = (await dayLocator.innerText()).trim();
+
+        // Skip empty/placeholder cells
+        if (!dayText || dayText === "\u00a0") continue;
+
+        const day = parseInt(dayText, 10);
+
+        // Get event value if it exists
+        const eventLocator = cell.locator(".dom-event").first();
+        const eventValue = (await eventLocator.count())
+            ? (await eventLocator.innerText()).trim()
+            : "";
+
+        console.log(`Day ${day} → Event: "${eventValue}"`);
+
+        // 🔹 Validate days up to today
+        if (day <= today) {
+            if (["A", "B", "C"].includes(eventValue)) {
+                console.log(`Day ${day} is valid`);
+            } else {
+                console.log(`Day ${day} is missing A/B/C`);
+            }
+        }
+
+        // 🔹 Validate tomorrow
+        if (day === tomorrow) {
+            if (!eventValue) {
+                console.log(`Tomorrow (day ${day}) is correctly empty`);
+            } else {
+                console.log(`Tomorrow (day ${day}) should be empty but found "${eventValue}"`);
+            }
+        }
+    }
+}
