@@ -21,7 +21,7 @@ test('verify Waste Heat Treatment Facility Page And Table Data', async ({ page }
   await expect(searchInput).toBeVisible({ timeout: 10000 });
   await searchInput.fill('Waste Heat Treatment Facility');
   await page.waitForTimeout(1000);
-  await page.keyboard.press('Enter');
+  await searchInput.press('Enter');
   await page.waitForLoadState('load');
   await page.waitForTimeout(2000);
   await base.CoveoresultIsVisible();
@@ -29,6 +29,7 @@ test('verify Waste Heat Treatment Facility Page And Table Data', async ({ page }
   const result = page.locator("//a[contains(@class,'CoveoResultLink')]//h4[normalize-space()='Waste Heat Treatment Facility']");
   await page.waitForTimeout(1000);
   await expect(result).toBeVisible({ timeout: 10000 });
+  await base.handleFeedbackModal();
   await result.click();
   await page.waitForLoadState('load');
   await page.waitForTimeout(1000);

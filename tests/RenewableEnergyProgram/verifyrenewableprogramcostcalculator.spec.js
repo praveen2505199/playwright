@@ -21,14 +21,16 @@ test('verify Renewable Program Cost Calculator Functionality', async ({ page }) 
     await expect(searchInput).toBeVisible({ timeout: 100 });
     await searchInput.fill('Renewable Programs Cost Calculator');
     await page.waitForTimeout(100);
-    await page.keyboard.press('Enter');
+    await searchInput.press('Enter');
     await page.waitForLoadState('load');
     await page.waitForTimeout(500);
    // await page.waitForSelector("//*[@id='coveo01cd4840']//*[@class='coveo-result-list-container coveo-list-layout-container']//*[@class='coveo-list-layout CoveoResult']");
    await base.CoveoresultIsVisible();
    const result = page.locator("//a[contains(@class,'CoveoResultLink')]//h4[normalize-space()='Renewable Programs Cost Calculator']");
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(5000);
+    await result.scrollIntoViewIfNeeded();
     await expect(result).toBeVisible();
+    await base.handleFeedbackModal();
     await result.click();
     await page.waitForLoadState('load');
     await page.waitForTimeout(100);

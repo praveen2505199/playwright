@@ -17,9 +17,9 @@ test('Verify Community Action Resource Search and Pagination Functionality', asy
     await searchIcon.click();
     const searchInput=page.locator('#search-box-input');
     await expect(searchInput).toBeVisible({ timeout: 1000 });
-    await searchInput.fill('Community Action Resource');
+    await searchInput.fill('Community Action Resources');
     await page.waitForTimeout(1000);
-    await page.keyboard.press('Enter');
+    await searchInput.press('Enter');
     await page.waitForLoadState('load');
     await page.waitForTimeout(1000);
     await base.CoveoresultIsVisible();
@@ -28,6 +28,7 @@ test('Verify Community Action Resource Search and Pagination Functionality', asy
     await page.waitForTimeout(5000);
     //await expect(result).toBeVisible({ timeout: 20000 });
     await result.isVisible();
+    await base.handleFeedbackModal();
     await result.click();
     //await page.waitForLoadState('load');
     await page.waitForTimeout(1000);

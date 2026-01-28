@@ -28,7 +28,7 @@ test('Verify Our Stories Page Functionality with Search, Filters, and Pagination
   await searchInput.fill('Our Stories');
   await page.waitForTimeout(1000);
   console.log("Step 3: click the search results - 'Our Stories'")
-  await page.keyboard.press('Enter');
+await searchInput.press('Enter');
   await page.waitForLoadState('load');
   await page.waitForTimeout(1000);
  // await page.waitForSelector("//*[@id='coveo01cd4840']//*[@class='coveo-result-list-container coveo-list-layout-container']//*[@class='coveo-list-layout CoveoResult']");
@@ -37,6 +37,7 @@ test('Verify Our Stories Page Functionality with Search, Filters, and Pagination
   await page.waitForTimeout(10000);
   //await expect(result).toBeVisible({ timeout: 2000 });
   await result.isVisible();
+  await base.handleFeedbackModal();
   await result.click();
   await page.waitForLoadState('load');
   await page.waitForTimeout(1000);

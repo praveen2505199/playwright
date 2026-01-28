@@ -24,7 +24,7 @@ test('Verify Lower Saluda River Level Date Update', async ({ page }) => {
     await page.waitForTimeout(3000);
     await searchInput.fill('Lower Saluda River SC');
     await page.waitForTimeout(1000);
-    await page.keyboard.press('Enter');
+    await searchInput.press('Enter');
     await page.waitForLoadState('load');
     await page.waitForTimeout(2000);
     //await page.waitForSelector("//*[@id='coveo01cd4840']//*[@class='coveo-result-list-container coveo-list-layout-container']//*[@class='coveo-list-layout CoveoResult']");
@@ -32,6 +32,7 @@ test('Verify Lower Saluda River Level Date Update', async ({ page }) => {
     const result = page.locator("//a[contains(@class,'CoveoResultLink')]//h4[normalize-space()='Lower Saluda River SC']");
     await page.waitForTimeout(1000);
     await expect(result).toBeVisible({ timeout: 10000 });
+    await base.handleFeedbackModal();
     await result.click();
     await page.waitForLoadState('load');
     await page.waitForTimeout(1000);

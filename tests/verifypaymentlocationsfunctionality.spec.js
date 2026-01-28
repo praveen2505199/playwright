@@ -26,7 +26,7 @@ test('Verify Payment Locations Page Search and Pagination Functionality', async 
     await searchInput.fill('Payment Locations');
     await page.waitForTimeout(1000);
     console.log("Step 3: click the search results - 'Payment Locations'")
-    await page.keyboard.press('Enter');
+    await searchInput.press('Enter');
     await page.waitForLoadState('load');
     await page.waitForTimeout(1000);
     //await page.waitForSelector("//*[@id='coveo01cd4840']//*[@class='coveo-result-list-container coveo-list-layout-container']//*[@class='coveo-list-layout CoveoResult']");
@@ -34,6 +34,7 @@ test('Verify Payment Locations Page Search and Pagination Functionality', async 
     const result = page.locator("//a[contains(@class,'CoveoResultLink')]//h4[normalize-space()='Payment Locations']");
     await page.waitForTimeout(4000);
     await expect(result).toBeVisible({ timeout: 2000 });
+    await base.handleFeedbackModal();
     await result.click();
     await page.waitForLoadState('load');
     await page.waitForTimeout(1000);

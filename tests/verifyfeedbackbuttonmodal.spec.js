@@ -7,7 +7,7 @@ test('Verify Feedback Button Modal Visibility', async ({ page }) => {
         await base.open(urls.base);
         await base.acceptCookies();
         await page.waitForLoadState('load');
-        await page.waitForTimeout(1000);
+        await page.waitForTimeout(10000);
         const feedbackBtn = page.getByRole('button', { name: 'Feedback' });
         await feedbackBtn.waitFor({ state: 'visible', timeout: 30000 });
         // await page.waitForSelector("//button[contains(@class,'feedback-button')]", { state: 'visible', timeout: 50000 });

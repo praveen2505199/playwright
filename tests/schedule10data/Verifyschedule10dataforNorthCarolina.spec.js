@@ -31,11 +31,13 @@ async function ValidateSchedule10dataforNorthCarolina(page, base){
     await searchIcon.click();
     const searchInput = page.locator('#search-box-input');
     await searchInput.fill('Schedule 10');
-    await page.keyboard.press('Enter');
+   // await page.keyboard.press('Enter');
+    await searchInput.press('Enter');
     await page.waitForLoadState('load');
    // await page.waitForSelector("//*[@id='coveo01cd4840']//*[@class='coveo-result-list-container coveo-list-layout-container']//*[@class='coveo-list-layout CoveoResult']");
     await base.CoveoresultIsVisible();
     const result = page.locator("//a[contains(@href, '/Schedule-10') and contains(@class, 'CoveoResultLink')]");
+    await base.handleFeedbackModal();
     await result.click();
     await page.waitForLoadState('load');
     const currentUrl = page.url();

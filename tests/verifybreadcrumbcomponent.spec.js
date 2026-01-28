@@ -23,7 +23,7 @@ test('Breadcrumb Navigation: Verifying Correct Path and Functionality', async ({
     await expect(searchInput).toBeVisible({ timeout: 1000 });
     await searchInput.fill('Budget Billing');
     await page.waitForTimeout(1000);
-    await page.keyboard.press('Enter');
+    await searchInput.press('Enter');
     await page.waitForLoadState('load');
     await page.waitForTimeout(1000);
     await base.CoveoresultIsVisible();
@@ -31,6 +31,7 @@ test('Breadcrumb Navigation: Verifying Correct Path and Functionality', async ({
     await page.waitForTimeout(4000);
     await result.isVisible();
     //await expect(result).toBeVisible({ timeout: 1000 });
+    await base.handleFeedbackModal();
     await result.click();
     await page.waitForLoadState('load');
     await page.waitForTimeout(1000);

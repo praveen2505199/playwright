@@ -183,6 +183,24 @@ class BasePage {
 
   }
 
+
+  async handleFeedbackModal(){
+    const feedbackModal = this.page.locator(
+    "//div[contains(@class,'uws-modal') and contains(@class,'uws-survey-modal') and @role='dialog' and @aria-modal='true']"
+  );
+   if (await feedbackModal.first().isVisible()) {
+    const closeBtn = feedbackModal
+      .first()
+      .locator("button.uws-modal__close[aria-label='Close']");
+
+    await closeBtn.click();
+    return true; // modal was present & closed
+  } else {
+    // your else logic goes here
+    return false; // modal not present
+  }
+
+  }
   // Function to check network status and log error codes
   async checkNetworkStatus() {
     let networkError = false;

@@ -5,7 +5,7 @@ const { search } = require('../config/urls');
 
 test('Validate Search Filters And Pagination Functionality', async ({ page }) => {
 
-  test.setTimeout(200000);
+ 
   const base = new BasePage(page);
   // 1) Open base and accept cookies
   console.log("Step 1: Open base URL and accept cookies");
@@ -46,6 +46,7 @@ test('Validate Search Filters And Pagination Functionality', async ({ page }) =>
 
     const w = i + 1;
     const locationItem = locationItems.nth(i);
+    await page.waitForTimeout(2000);
     await locationItem.waitFor({ state: 'visible' });
     await locationItem.scrollIntoViewIfNeeded();
     await locationItem.click();
@@ -53,9 +54,9 @@ test('Validate Search Filters And Pagination Functionality', async ({ page }) =>
     //const locationItems = page.locator(`//*[@data-title='Location']/ul/li[${w}]`);
     const locname = await locationItem.getAttribute('data-value');
     console.log(`[Location ${i + 1}] Location Name: ${locname}`);
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(5000);
     const counts = await page.locator("//*[@data-title='Location']/ul/li[" + w + "]//*[@class='coveo-facet-value-count']"); await page.waitForTimeout(1000);
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(5000);
     const countText = await counts.innerText();
     const countClean = countText.replace(/[+,]/g, '');
     console.log(`[Location ${i + 1}] Facet count: ${countClean}`);

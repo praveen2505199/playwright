@@ -11,7 +11,7 @@ function formatDate_MMddyy(date) {
 }
 
 test('Verify Electric Load Data with Date Validation for Current Month and Previous Days', async ({ page }) => {
-test.setTimeout(120000);
+  test.setTimeout(120000);
   const base = new BasePage(page);
 
   await base.open(urls.electricLoadData);
@@ -26,11 +26,13 @@ test.setTimeout(120000);
 
   const searchInput = page.locator('#search-box-input');
   await searchInput.fill('Electric Transmission Access');
-  await page.keyboard.press('Enter');
+  await searchInput.press('Enter');
 
   await base.CoveoresultIsVisible();
   const result = page.locator("//a[contains(@class,'CoveoResultLink')]//h4[normalize-space()='Electric Transmission Access']");
-  await page.waitForTimeout(2000);
+  await page.waitForTimeout(10000);
+  await page.waitForLoadState('networkidle');
+  await base.handleFeedbackModal();
   await result.click();
 
   // Click "PJM-South Zone Load (Current Month)"

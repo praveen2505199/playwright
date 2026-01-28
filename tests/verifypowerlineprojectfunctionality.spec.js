@@ -28,13 +28,14 @@ test('verifyPowerLineProjectsSearchAndMapFunctionality', async ({ page }) => {
     await searchInput.fill('Power Line Projects');
     await page.waitForTimeout(1000);
     console.log("Step 3: click the search results - 'Powerline Projects'")
-    await page.keyboard.press('Enter');
+    await searchInput.press('Enter');
     await page.waitForLoadState('load');
     await page.waitForTimeout(1000);
     await base.CoveoresultIsVisible();
     const result = page.locator("//a[contains(@class,'CoveoResultLink')]//h4[normalize-space()='Power Line Projects']");
     await page.waitForTimeout(1000);
     //await expect(result).toBeVisible({ timeout: 2000 });
+    await base.handleFeedbackModal();
     await result.click();
     await page.waitForLoadState('load');
     await page.waitForTimeout(1000);
@@ -105,7 +106,9 @@ const firstSuggestion = page.locator("//div[@id='addressInputautocomplete-list']
 await firstSuggestion.waitFor({ state: 'visible', timeout: 20000 });
 await firstSuggestion.click();
 await searchButton.click();
+await page.waitForTimeout(3000);
 const marker = page.locator("//img[contains(@class, 'leaflet-marker-icon')]");
+await page.waitForTimeout(3000);
 // Verify that the marker is placed on the map
 await marker.isVisible();
 await expect(marker).toBeVisible();

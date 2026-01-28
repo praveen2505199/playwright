@@ -21,11 +21,12 @@ test('Verify Smart Pricing Plan Calendar Month And Events For Homes', async ({ p
     await searchIcon.click();
     const searchInput = page.locator('#search-box-input');
     await searchInput.fill('Smart Pricing Plan');
-    await page.keyboard.press('Enter');
+    await searchInput.press('Enter');
     await page.waitForLoadState('load');
     //await page.waitForSelector("//*[@id='coveo01cd4840']//*[@class='coveo-result-list-container coveo-list-layout-container']//*[@class='coveo-list-layout CoveoResult']");
     await base.CoveoresultIsVisible();
     const result = page.locator("//a[contains(@href, '/Smart-Pricing-Plan') and contains(@class, 'CoveoResultLink')]");
+    await base.handleFeedbackModal();
     await result.click();
     await page.waitForLoadState('load');
     const currentUrl = page.url();
