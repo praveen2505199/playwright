@@ -4,6 +4,7 @@ const { BasePage } = require('../pages/basePage');
 test('Verify Community Action Resource Search and Pagination Functionality', async ({ page }) => {
   test.setTimeout(180000);
     const base = new BasePage(page);
+    await base.handleFeedbackModal();
   await base.open(urls.base);
    await base.acceptCookies();
     await page.waitForLoadState('load');
@@ -28,7 +29,7 @@ test('Verify Community Action Resource Search and Pagination Functionality', asy
     await page.waitForTimeout(5000);
     //await expect(result).toBeVisible({ timeout: 20000 });
     await result.isVisible();
-    await base.handleFeedbackModal();
+    //await base.handleFeedbackModal();
     await result.click();
     //await page.waitForLoadState('load');
     await page.waitForTimeout(1000);

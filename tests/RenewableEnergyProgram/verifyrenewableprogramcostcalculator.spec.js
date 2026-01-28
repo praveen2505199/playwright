@@ -5,6 +5,7 @@ const { BasePage } = require('../../pages/basePage');
 test('verify Renewable Program Cost Calculator Functionality', async ({ page }) => {
   test.setTimeout(120000);
   const base = new BasePage(page);
+  await base.handleFeedbackModal();
     await base.open(urls.base);
     await base.acceptCookies();
     await page.waitForLoadState('load');
@@ -30,7 +31,7 @@ test('verify Renewable Program Cost Calculator Functionality', async ({ page }) 
     await page.waitForTimeout(5000);
     await result.scrollIntoViewIfNeeded();
     await expect(result).toBeVisible();
-    await base.handleFeedbackModal();
+   // await base.handleFeedbackModal();
     await result.click();
     await page.waitForLoadState('load');
     await page.waitForTimeout(100);

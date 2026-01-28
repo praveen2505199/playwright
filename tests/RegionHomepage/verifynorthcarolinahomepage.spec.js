@@ -7,6 +7,7 @@ test('North Carolina: Verify Location Selection and URL Navigation', async ({ pa
   
   test.setTimeout(60000);
   const base = new BasePage(page);
+   await base.handleFeedbackModal();
   await base.open(urls.base);
   await base.acceptCookies();
   const locationMenu = page.locator("//a[text()='Location']");

@@ -5,7 +5,7 @@ const { BasePage } = require('../pages/basePage');
 test('Chatbot Functionality Test: Verifying Message Flow and Responses', async ({ page }) => {
   test.setTimeout(180000);
   const base = new BasePage(page);
-
+  await base.handleFeedbackModal();
   // 1) Open base and accept cookies
   await base.open(urls.base);
   await base.acceptCookies();

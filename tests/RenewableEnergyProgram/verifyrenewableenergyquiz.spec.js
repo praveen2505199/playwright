@@ -4,6 +4,7 @@ const { BasePage } = require('../../pages/basePage');
 test('verify Renewable Energy Quiz Functionality', async ({ page }) => {
   test.setTimeout(120000);
     const base = new BasePage(page);
+    await base.handleFeedbackModal();
     await base.open(urls.base);
     await base.acceptCookies();
     await page.waitForLoadState('load');
@@ -27,7 +28,7 @@ test('verify Renewable Energy Quiz Functionality', async ({ page }) => {
     const result = page.locator("//a[contains(@class,'CoveoResultLink')]//h4[normalize-space()='Renewable Energy Quiz']");
     await page.waitForTimeout(3000);
     await expect(result).toBeVisible();
-    await base.handleFeedbackModal();
+   // await base.handleFeedbackModal();
     await result.click();
     await page.waitForLoadState('load');
     await page.waitForTimeout(100);

@@ -5,6 +5,7 @@ const { BasePage } = require('../../pages/basePage');
 test('Verify Correct Calendar Date And Events On Schedule10 Virginia', async ({ page }) => {
     test.setTimeout(200000);
     const base = new BasePage(page);
+    await base.handleFeedbackModal();
     
     console.log("Step 1: Open base URL and accept cookies");
     await base.open(urls.base);
@@ -37,7 +38,7 @@ async function ValidateSchedule10dataforVirginia(page, base)
    // await page.waitForSelector("//*[@id='coveo01cd4840']//*[@class='coveo-result-list-container coveo-list-layout-container']//*[@class='coveo-list-layout CoveoResult']");
     await base.CoveoresultIsVisible();
     const result = page.locator("//a[contains(@href, '/Schedule-10-Data') and contains(@class, 'CoveoResultLink')]");
-    await base.handleFeedbackModal();
+   // await base.handleFeedbackModal();
     await result.click();
     await page.waitForLoadState('load');
     const currentUrl = page.url();

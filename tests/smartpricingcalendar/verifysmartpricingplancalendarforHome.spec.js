@@ -5,7 +5,7 @@ const { BasePage } = require('../../pages/basePage');
 test('Verify Smart Pricing Plan Calendar Month And Events For Homes', async ({ page }) => {
     test.setTimeout(120000);
     const base = new BasePage(page);
-    
+    await base.handleFeedbackModal();
     console.log("Step 1: Open base URL and accept cookies");
     await base.open(urls.base);
     await base.acceptCookies();
@@ -26,7 +26,7 @@ test('Verify Smart Pricing Plan Calendar Month And Events For Homes', async ({ p
     //await page.waitForSelector("//*[@id='coveo01cd4840']//*[@class='coveo-result-list-container coveo-list-layout-container']//*[@class='coveo-list-layout CoveoResult']");
     await base.CoveoresultIsVisible();
     const result = page.locator("//a[contains(@href, '/Smart-Pricing-Plan') and contains(@class, 'CoveoResultLink')]");
-    await base.handleFeedbackModal();
+   // await base.handleFeedbackModal();
     await result.click();
     await page.waitForLoadState('load');
     const currentUrl = page.url();

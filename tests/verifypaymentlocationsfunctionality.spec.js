@@ -7,6 +7,7 @@ test('Verify Payment Locations Page Search and Pagination Functionality', async 
 
     test.setTimeout(200000);
     const base = new BasePage(page);
+    await base.handleFeedbackModal();
     console.log("Step 1: Open base URL and accept cookies");
     await base.open(urls.base);
     await base.acceptCookies();
@@ -34,7 +35,7 @@ test('Verify Payment Locations Page Search and Pagination Functionality', async 
     const result = page.locator("//a[contains(@class,'CoveoResultLink')]//h4[normalize-space()='Payment Locations']");
     await page.waitForTimeout(4000);
     await expect(result).toBeVisible({ timeout: 2000 });
-    await base.handleFeedbackModal();
+   // await base.handleFeedbackModal();
     await result.click();
     await page.waitForLoadState('load');
     await page.waitForTimeout(1000);

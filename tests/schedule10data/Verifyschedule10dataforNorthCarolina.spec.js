@@ -9,6 +9,7 @@ test('Verify Correct Calendar Date And Events On Schedule10 NorthCarolina', asyn
     
     console.log("Step 1: Open base URL and accept cookies");
     await base.open(urls.base);
+    await base.handleFeedbackModal();
     await base.acceptCookies();
     await page.waitForLoadState('load');
      await ValidateSchedule10dataforNorthCarolina(page,base);
@@ -37,7 +38,7 @@ async function ValidateSchedule10dataforNorthCarolina(page, base){
    // await page.waitForSelector("//*[@id='coveo01cd4840']//*[@class='coveo-result-list-container coveo-list-layout-container']//*[@class='coveo-list-layout CoveoResult']");
     await base.CoveoresultIsVisible();
     const result = page.locator("//a[contains(@href, '/Schedule-10') and contains(@class, 'CoveoResultLink')]");
-    await base.handleFeedbackModal();
+   // await base.handleFeedbackModal();
     await result.click();
     await page.waitForLoadState('load');
     const currentUrl = page.url();

@@ -13,7 +13,7 @@ function formatDate_MMddyy(date) {
 test('Verify Electric Load Data with Date Validation for Current Month and Previous Days', async ({ page }) => {
   test.setTimeout(120000);
   const base = new BasePage(page);
-
+  await base.handleFeedbackModal();
   await base.open(urls.electricLoadData);
   await base.acceptCookies();
   await page.waitForLoadState('load');
@@ -32,7 +32,7 @@ test('Verify Electric Load Data with Date Validation for Current Month and Previ
   const result = page.locator("//a[contains(@class,'CoveoResultLink')]//h4[normalize-space()='Electric Transmission Access']");
   await page.waitForTimeout(10000);
   await page.waitForLoadState('networkidle');
-  await base.handleFeedbackModal();
+  //await base.handleFeedbackModal();
   await result.click();
 
   // Click "PJM-South Zone Load (Current Month)"

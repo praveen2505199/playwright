@@ -8,7 +8,7 @@ test('Breadcrumb Navigation: Verifying Correct Path and Functionality', async ({
   const base = new BasePage(page);
   await base.open(urls.base);
   await base.acceptCookies();
-
+await base.handleFeedbackModal();
   const locationMenu = page.locator("//a[text()='Location']");
   await expect(locationMenu).toBeVisible();
   // Click the Location menu
@@ -31,7 +31,7 @@ test('Breadcrumb Navigation: Verifying Correct Path and Functionality', async ({
     await page.waitForTimeout(4000);
     await result.isVisible();
     //await expect(result).toBeVisible({ timeout: 1000 });
-    await base.handleFeedbackModal();
+   // await base.handleFeedbackModal();
     await result.click();
     await page.waitForLoadState('load');
     await page.waitForTimeout(1000);

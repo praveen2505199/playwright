@@ -5,6 +5,7 @@ const { BasePage } = require('../../pages/basePage');
 test('Verify Lake Murray River Level Date Update', async ({ page }) => {
   test.setTimeout(120000);
   const base = new BasePage(page);
+  await base.handleFeedbackModal();
   // 1) Open base and accept cookies
   await base.open(urls.base);
   await base.acceptCookies();
@@ -32,7 +33,7 @@ test('Verify Lake Murray River Level Date Update', async ({ page }) => {
   const result = page.locator("//a[contains(@class,'CoveoResultLink')]//h4[normalize-space()='Lake Murray SC']");
   await page.waitForTimeout(1000);
   await expect(result).toBeVisible({ timeout: 10000 });
-  await base.handleFeedbackModal();
+ // await base.handleFeedbackModal();
   await result.click();
   await page.waitForLoadState('load');
   await page.waitForTimeout(1000);
