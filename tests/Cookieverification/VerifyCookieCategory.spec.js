@@ -5,7 +5,7 @@ const urls = require('../../config/urls.json');
 test('Verify Cookie Preferences and Default Settings for Performance, Functional, and Targeting Cookies ', async ({ page }) => {
   test.setTimeout(120000);
   const base = new BasePage(page);
-
+  await base.handleFeedbackModal();
   await base.open(urls.base);
   const banner = page.locator('#onetrust-banner-sdk');
   //await banner.waitFor({ state: 'visible', Timeout });

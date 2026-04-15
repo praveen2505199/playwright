@@ -5,8 +5,7 @@ const { BasePage } = require('../../pages/basePage');
 test('Verify Smart Pricing Plan Calendar Month And EventsFor Business', async ({ page }) => {
     test.setTimeout(180000);
     const base = new BasePage(page);
-    await base.handleFeedbackModal();
-    
+    await base.handleFeedbackModal();  
     console.log("Step 1: Open base URL and accept cookies");
     await base.open(urls.base);
     await base.acceptCookies();

@@ -4,7 +4,7 @@ const urls = require('../../config/urls.json');
 
 test('verifyCookiesNotSetAfterRejectingAllCookies', async ({ page }) => {
   const base = new BasePage(page);
-
+  await base.handleFeedbackModal();
   // Open the target page
   await base.open(urls.base);
 

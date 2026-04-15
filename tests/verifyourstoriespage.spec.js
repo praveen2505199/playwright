@@ -6,6 +6,7 @@ test('Verify Our Stories Page Functionality with Search, Filters, and Pagination
 
   test.setTimeout(200000);
   const base = new BasePage(page);
+  await base.handleFeedbackModal();
   // 1) Open base and accept cookies
   console.log("Step 1: Open base URL and accept cookies");
   await base.open(urls.base);
@@ -28,11 +29,11 @@ test('Verify Our Stories Page Functionality with Search, Filters, and Pagination
   await searchInput.fill('Our Stories');
   await page.waitForTimeout(1000);
   console.log("Step 3: click the search results - 'Our Stories'")
-await searchInput.press('Enter');
+  await searchInput.press('Enter');
   await page.waitForLoadState('load');
   await page.waitForTimeout(1000);
- // await page.waitForSelector("//*[@id='coveo01cd4840']//*[@class='coveo-result-list-container coveo-list-layout-container']//*[@class='coveo-list-layout CoveoResult']");
-   await base.CoveoresultIsVisible();
+  // await page.waitForSelector("//*[@id='coveo01cd4840']//*[@class='coveo-result-list-container coveo-list-layout-container']//*[@class='coveo-list-layout CoveoResult']");
+  await base.CoveoresultIsVisible();
   const result = page.locator("//a[contains(@class,'CoveoResultLink')]//h4[normalize-space()='Our Stories']");
   await page.waitForTimeout(10000);
   //await expect(result).toBeVisible({ timeout: 2000 });
@@ -209,6 +210,7 @@ await searchInput.press('Enter');
       const text = (await button.innerText()).trim();
       if (text === currentPage.toString()) {
         targetPageButton = button;
+        await page.waitForTimeout(500);
         break;
       }
     }

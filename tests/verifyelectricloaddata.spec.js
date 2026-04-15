@@ -58,7 +58,7 @@ test('Verify Electric Load Data with Date Validation for Current Month and Previ
   const nowESTString = new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
   const today = new Date(nowESTString);
 
-   // Yesterday (EST)
+  // Yesterday (EST)
   const yesterday = new Date(today);
   yesterday.setDate(today.getDate() - 1);
 

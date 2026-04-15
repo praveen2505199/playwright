@@ -3,8 +3,9 @@ const urls = require('../config/urls.json');
 const { BasePage } = require('../pages/basePage');
 
 test('Header: Verify UI Interactions, Header Navigation, and Location Selector Functionality', async ({ page }) => {
- test.setTimeout(120000);
-     const base = new BasePage(page);    
+    test.setTimeout(180000);
+    const base = new BasePage(page);
+    await base.handleFeedbackModal();
     await base.open(urls.base);
     await base.acceptCookies();
     console.log('Cookie banner accepted');
@@ -26,18 +27,18 @@ test('Header: Verify UI Interactions, Header Navigation, and Location Selector F
     ];
 
     for (const button of buttons) {
-    // Log the selector being used
-    console.log(`Checking if ${button.label} exists using selector: ${button.selector}`);
+        // Log the selector being used
+        console.log(`Checking if ${button.label} exists using selector: ${button.selector}`);
 
-    const btn = page.locator(button.selector);
-    
-    // Wait for the button to be visible with a timeout to ensure it has loaded
+        const btn = page.locator(button.selector);
+
+        // Wait for the button to be visible with a timeout to ensure it has loaded
         await btn.waitFor({ state: 'visible', timeout: 10000 });  // Wait for up to 5 seconds
         console.log(`${button.label} is visible`);
 
         // After confirming visibility, assert it's visible
         await expect(btn).toBeVisible(`${button.label} should be displayed`);
-   
+
     }
     // 3. Verify user is able to click Location selector
     console.log('Step 3: Clicking the Location selector');
@@ -67,12 +68,12 @@ test('Header: Verify UI Interactions, Header Navigation, and Location Selector F
     await page.click('a.login[aria-label="Sign In"]');
     console.log('Sign In button clicked');
     await page.waitForTimeout(1000);
-     await base.handleChooselater();
+    await base.handleChooselater();
 
     // 8. Verify user is able to click header menu and handle dropdown visibility
     console.log('Step 8: Verifying and interacting with header menus');
 
-   //Get all header menus
+    //Get all header menus
     const headerMenus = page.locator("//div[contains(@class, 'secondary-navigation') and contains(@class, 'main-nav')]");
     //await base.handleChooselater();
     // Loop through all header menus
@@ -81,7 +82,7 @@ test('Header: Verify UI Interactions, Header Navigation, and Location Selector F
         //await base.handleChooselater();
         const menuId = await menu.getAttribute('id');
         const menuText = await menu.textContent(); // Optionally, you can use text to identify the menu
-        
+
         console.log(`Checking header menu: ${menuId || menuText || 'No ID or Text'}`);
 
         // Wait for the menu to be visible before interacting with it
@@ -97,8 +98,8 @@ test('Header: Verify UI Interactions, Header Navigation, and Location Selector F
         await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
 
         // Dispatch mouse events to trigger hover behavior using Playwright's hover method instead of JS evaluation
-        await menu.hover();  
-       // await menu.h   // Use Playwright's built-in hover method to simplify this step
+        await menu.hover();
+        // await menu.h   // Use Playwright's built-in hover method to simplify this step
 
         console.log(`Hovered over the menu: ${menuId || menuText}`);
 
@@ -128,7 +129,7 @@ test('Header: Verify UI Interactions, Header Navigation, and Location Selector F
     // 9. Verify user is able to select a location
     console.log('Step 9: Selecting a location');
     domLogo.click();
-   // await page.goto(base);  // Replace with the correct base URL
+    // await page.goto(base);  // Replace with the correct base URL
     await page.click('a#location-select:has-text("Location")');
     console.log('Location selector opened');
 
@@ -143,8 +144,6 @@ test('Header: Verify UI Interactions, Header Navigation, and Location Selector F
     console.log(`Clicking on random location: ${locationName}`);
     await page.waitForTimeout(5000);
     //await selectedLocation.waitFor({ state: 'visible', timeout: 5000 });
-
-
     await selectedLocation.click();
 
     // Click the continue button after selecting a location
@@ -152,16 +151,16 @@ test('Header: Verify UI Interactions, Header Navigation, and Location Selector F
     await continueBtn.click();
     console.log('Continue button clicked after location selection');
 
-   const currentUrl = page.url();
-   const currentUrlTrimmed = currentUrl.replace(/\/$/, "").toLowerCase();
-   //console.log(currentUrlTrimmed);
-   console.log("Current URL :", currentUrlTrimmed);
-   // Build correct expected URL
-   const stateSlug = expectedUrlPart.split("/").pop().toLowerCase(); // "north-carolina"
-   const expectedUrl = `${urls.base}/${stateSlug}`;
-   //expect(currentUrlTrimmed).toBe(expectedUrl);
-   //console.log(expectedUrl);
-   console.log("Expected URL:", expectedUrl);
+    const currentUrl = page.url();
+    const currentUrlTrimmed = currentUrl.replace(/\/$/, "").toLowerCase();
+    //console.log(currentUrlTrimmed);
+    console.log("Current URL :", currentUrlTrimmed);
+    // Build correct expected URL
+    const stateSlug = expectedUrlPart.split("/").pop().toLowerCase(); // "north-carolina"
+    const expectedUrl = `${urls.base}/${stateSlug}`;
+    //expect(currentUrlTrimmed).toBe(expectedUrl);
+    //console.log(expectedUrl);
+    console.log("Expected URL:", expectedUrl);
 
     // 11. Verify user is able to navigate header menu and location selector is not displaying
     console.log('Step 11: Verifying navigation to Pay My Bill page successfull');

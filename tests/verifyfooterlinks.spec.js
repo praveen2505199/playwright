@@ -5,6 +5,7 @@ const { BasePage } = require('../pages/basePage');
 test('Verify Footer Links, Social Media, and Navigation Functionality', async ({ page }) => {
   test.setTimeout(120000);
   const base = new BasePage(page);
+  await base.handleFeedbackModal();
   await base.open(urls.base);
   await base.acceptCookies();
   

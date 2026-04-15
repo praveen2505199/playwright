@@ -4,6 +4,7 @@ const { BasePage } = require('../pages/basePage');
 test('Verify 404 Error Page Handling for Random Invalid URL', async ({ page }) => {
   test.setTimeout(120000);  
   const base = new BasePage(page);
+  await base.handleFeedbackModal();
     await base.open();
     await base.acceptCookies();
 

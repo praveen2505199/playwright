@@ -28,7 +28,9 @@ test('Verify Smart Pricing Plan Calendar Month And Events For Homes', async ({ p
     const result = page.locator("//a[contains(@href, '/Smart-Pricing-Plan') and contains(@class, 'CoveoResultLink')]");
    // await base.handleFeedbackModal();
     await result.click();
-    await page.waitForLoadState('load');
+    await page.waitForTimeout(3000);
+    await page.reload();
+    //await page.waitForLoadState('load');
     const currentUrl = page.url();
     
     console.log("Step 3: Verify it navigates to Smart Pricing Plan page");

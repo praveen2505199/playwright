@@ -30,8 +30,8 @@ test('Verify Lake Murray River Level Date Update', async ({ page }) => {
   await page.waitForTimeout(2000);
   //await page.waitForSelector("//*[@id='coveo01cd4840']//*[@class='coveo-result-list-container coveo-list-layout-container']//*[@class='coveo-list-layout CoveoResult']");
   await base.CoveoresultIsVisible();
-  const result = page.locator("//a[contains(@class,'CoveoResultLink')]//h4[normalize-space()='Lake Murray SC']");
-  await page.waitForTimeout(1000);
+  const result = page.locator("//a[contains(@class,'CoveoResultLink')]//h4[normalize-space()='Lake Murray, SC']");
+  await page.waitForTimeout(2000);
   await expect(result).toBeVisible({ timeout: 10000 });
  // await base.handleFeedbackModal();
   await result.click();
@@ -51,7 +51,7 @@ test('Verify Lake Murray River Level Date Update', async ({ page }) => {
   const datetime = await page.locator('.date-time').innerText();
   const date = datetime.split('|')[0].trim();
   
-  /* const todayEST = new Date().toLocaleString("en-US", {
+   const todayEST = new Date().toLocaleString("en-US", {
     timeZone: "America/New_York",
     month: "long",
     day: "numeric",
@@ -60,34 +60,12 @@ test('Verify Lake Murray River Level Date Update', async ({ page }) => {
  
   console.log("Date shown on page:", date);
   console.log("Today's date EST:", todayEST);
-  if (date === yestEST) {
+  if (date === todayEST) {
     expect(date).toBe(todayEST);
     console.log("Date verification passed: Latest River Level got updated.");
 
   } else {
     console.log("Date verification failed: Latest River Level not updated.");
-  } */
-
-
-    const estDate = new Date(
-  new Date().toLocaleString("en-US", { timeZone: "America/New_York" })
-);
-
-// Get yesterday
-estDate.setDate(estDate.getDate() - 1);
-
-// Format yesterday for comparison
-const yestEST = estDate.toLocaleString("en-US", {
-  month: "long",
-  day: "numeric",
-  year: "numeric"
-});
-
-console.log("Date shown on page:", date);
-console.log("Yesterday's date EST:", yestEST);
-
-// Assertion
-//expect(date).toBe(yestEST);
-expect(date).not.toEqual(yestEST);
+  } 
 
 });

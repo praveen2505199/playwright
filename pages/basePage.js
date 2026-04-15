@@ -1,8 +1,9 @@
 const { acceptCookies } = require('../utils/common');
 
 class BasePage {
-  constructor(page) {
+  constructor(page, browser) {
     this.page = page;
+    this.browser=browser;
     this.baseUrl = 'https://www.dominionenergy.com';  // Default URL
     this.retries = 3;  // Default retry count
     this.retryDelay = 5000;  // Default retry delay (3 seconds)
@@ -17,6 +18,20 @@ class BasePage {
 
         // Wait for a specific DOM element to become visible
         await this.page.locator(selector).waitFor({ state: 'visible', timeout: 30000 });
+        // Check if the page shows the "Close the browser and retry again" message
+        const retryMessage = this.page.locator('text="Close the browser and retry again"');
+        if ((await retryMessage.count()) > 0) {
+          throw new Error('Detected in-page error: "Close the browser and retry again"');
+          await this.browser.close();
+
+          // Re-launch browser and page
+          this.browser = await chromium.launch({ headless: false });
+          this.page = await this.browser.newPage();
+
+          // Retry immediately
+          attempt++;
+          continue;
+        }
 
         return; // Success: exit the loop
       } catch (err) {
@@ -184,8 +199,8 @@ class BasePage {
   }
 
 
-  async handleFeedbackModal(){
-  await this.page.addLocatorHandler(
+  async handleFeedbackModal() {
+    await this.page.addLocatorHandler(
       this.page.locator(
         "//div[contains(@class,'uws-modal') and contains(@class,'uws-survey-modal') and @role='dialog' and @aria-modal='true']"
       ),
@@ -194,6 +209,7 @@ class BasePage {
           "button.uws-modal__close[aria-label='Close']"
         );
         await closeBtn.click({ force: true });
+        await modal.waitFor({ state: "hidden" });
       }
     );
 

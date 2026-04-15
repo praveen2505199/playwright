@@ -6,11 +6,13 @@ test('Cookie Verification Test: Ensuring Performance, Target, and Functional Coo
   test.setTimeout(120000);
   
   const base = new BasePage(page);
+  await base.handleFeedbackModal();
 
   await base.open(urls.base);
   await base.acceptCookies();
   const HeaderLogo = page.locator('a[aria-label="Dominion Energylogo"] img[alt="Dominion Energy"]');
   await HeaderLogo.isVisible();
+  await page.waitForTimeout(2000);
   HeaderLogo.click();
   await page.waitForLoadState('domcontentloaded');
 

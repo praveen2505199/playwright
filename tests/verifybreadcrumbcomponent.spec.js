@@ -3,12 +3,12 @@ const urls = require('../config/urls.json');
 const { BasePage } = require('../pages/basePage');
 
 test('Breadcrumb Navigation: Verifying Correct Path and Functionality', async ({ page }) => {
- 
+
   test.setTimeout(180000);
   const base = new BasePage(page);
   await base.open(urls.base);
   await base.acceptCookies();
-await base.handleFeedbackModal();
+  await base.handleFeedbackModal();
   const locationMenu = page.locator("//a[text()='Location']");
   await expect(locationMenu).toBeVisible();
   // Click the Location menu
@@ -16,30 +16,30 @@ await base.handleFeedbackModal();
   await page.waitForTimeout(500);
   await base.handleLocationVirginia();
   const searchIcon = page.locator("//button[@class='search']");
-    await expect(searchIcon).toBeVisible({ timeout: 10000 });
-    await searchIcon.isEnabled({ timeout: 10000 });
-    await searchIcon.click();
-    const searchInput=page.locator('#search-box-input');
-    await expect(searchInput).toBeVisible({ timeout: 1000 });
-    await searchInput.fill('Budget Billing');
-    await page.waitForTimeout(1000);
-    await searchInput.press('Enter');
-    await page.waitForLoadState('load');
-    await page.waitForTimeout(1000);
-    await base.CoveoresultIsVisible();
-    const result = page.locator("//a[contains(@class,'CoveoResultLink')]//h4[normalize-space()='Budget Billing']");
-    await page.waitForTimeout(4000);
-    await result.isVisible();
-    //await expect(result).toBeVisible({ timeout: 1000 });
-   // await base.handleFeedbackModal();
-    await result.click();
-    await page.waitForLoadState('load');
-    await page.waitForTimeout(1000);
-    const currentUrl = page.url();
-    if (currentUrl.includes('/virginia/paying-my-bill/billing-options-and-energy-assistance/budget-billing')) {
-     console.log("Budget Billing page loaded successfully:", currentUrl);
-    }
-     else {console.log("Failed to load the correct page.");} 
+  await expect(searchIcon).toBeVisible({ timeout: 10000 });
+  await searchIcon.isEnabled({ timeout: 10000 });
+  await searchIcon.click();
+  const searchInput = page.locator('#search-box-input');
+  await expect(searchInput).toBeVisible({ timeout: 1000 });
+  await searchInput.fill('Budget Billing');
+  await page.waitForTimeout(1000);
+  await searchInput.press('Enter');
+  await page.waitForLoadState('load');
+  await page.waitForTimeout(1000);
+  await base.CoveoresultIsVisible();
+  const result = page.locator("//a[contains(@class,'CoveoResultLink')]//h4[normalize-space()='Budget Billing']");
+  await page.waitForTimeout(4000);
+  await result.isVisible();
+  //await expect(result).toBeVisible({ timeout: 1000 });
+  // await base.handleFeedbackModal();
+  await result.click();
+  await page.waitForLoadState('load');
+  await page.waitForTimeout(1000);
+  const currentUrl = page.url();
+  if (currentUrl.includes('/virginia/paying-my-bill/billing-options-and-energy-assistance/budget-billing')) {
+    console.log("Budget Billing page loaded successfully:", currentUrl);
+  }
+  else { console.log("Failed to load the correct page."); }
 
   // -------------------------------
   // Verify Breadcrumb and navigation
@@ -77,8 +77,8 @@ await base.handleFeedbackModal();
     expect(actualUrl).toBe(expectedUrl);
 
     // Navigate back to original page to continue verifying remaining crumbs
-   // await page.goBack({ waitUntil: 'load' });
-  await page.goto(`${urls.base}${urls.breadcrumbPage}`, { waitUntil: 'load' });
+    // await page.goBack({ waitUntil: 'load' });
+    await page.goto(`${urls.base}${urls.breadcrumbPage}`, { waitUntil: 'load' });
 
   }
 

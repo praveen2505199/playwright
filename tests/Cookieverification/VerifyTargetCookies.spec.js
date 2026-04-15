@@ -5,7 +5,7 @@ const urls = require('../../config/urls.json');
 test('verify Targeting Cookies Behavior In MediaPage', async ({ page }) => {
   test.setTimeout(120000);
   const base = new BasePage(page);
-
+  await base.handleFeedbackModal();
   await base.open(urls.base);
   const banner = page.locator('#onetrust-banner-sdk');
   //await banner.waitFor({ state: 'visible', timeout });

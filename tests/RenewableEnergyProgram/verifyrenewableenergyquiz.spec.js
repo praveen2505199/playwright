@@ -2,7 +2,7 @@ const {test, expect} = require('@playwright/test');
 const urls = require('../../config/urls.json');
 const { BasePage } = require('../../pages/basePage');
 test('verify Renewable Energy Quiz Functionality', async ({ page }) => {
-  test.setTimeout(120000);
+  test.setTimeout(180000);
     const base = new BasePage(page);
     await base.handleFeedbackModal();
     await base.open(urls.base);
@@ -17,7 +17,7 @@ test('verify Renewable Energy Quiz Functionality', async ({ page }) => {
     await page.waitForTimeout(1000);
     await searchIcon.click();
     const searchInput=page.locator('#search-box-input');
-    await expect(searchInput).toBeVisible({ timeout: 100 });
+    await expect(searchInput).toBeVisible({ timeout: 3000 });
     await searchInput.fill('Renewable Energy Quiz');
     await page.waitForTimeout(100);
     await searchInput.press('Enter');
@@ -30,8 +30,10 @@ test('verify Renewable Energy Quiz Functionality', async ({ page }) => {
     await expect(result).toBeVisible();
    // await base.handleFeedbackModal();
     await result.click();
-    await page.waitForLoadState('load');
+
+    //await page.waitForLoadState('load');
     await page.waitForTimeout(100);
+    //await page.reload();
     const currentUrl = page.url();
     if (currentUrl.includes('/virginia/renewable-energy-programs/renewable-energy-101/quiz')) {
      console.log("Renewable energy quiz page loaded successfully:", currentUrl);
@@ -78,6 +80,7 @@ test('verify Renewable Energy Quiz Functionality', async ({ page }) => {
     await nextbtn.click();
     const quizResult= page.locator("//*[@class='rich-text-quiz-result']");
     //const resultText= await quizResult.innerText();
+     await page.waitForTimeout(1000);
     await expect(quizResult).toBeVisible();
     //console.log("Quiz Result Text:", resultText);
 

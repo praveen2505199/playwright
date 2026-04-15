@@ -6,7 +6,7 @@ test('Verify Correct Calendar Date And Events On Schedule10 NorthCarolina', asyn
 
     test.setTimeout(200000);
     const base = new BasePage(page);
-    
+    await base.handleFeedbackModal();
     console.log("Step 1: Open base URL and accept cookies");
     await base.open(urls.base);
     await base.handleFeedbackModal();
