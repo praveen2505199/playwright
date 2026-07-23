@@ -1,47 +1,34 @@
-const { test, expect } = require('@playwright/test');
-const urls = require('../../config/urls.json');
-const { BasePage } = require('../../pages/basePage');
+const { test } = require("@playwright/test");
 
-test('Cookie Verification Test: Ensuring Performance, Target, and Functional Cookies are Set Correctly ', async ({ page }) => {
+const urls = require("../../config/urls.json");
+const { BasePage } = require("../../pages/basePage");
+const { CookiePage } = require("../../pages/cookiePage");
+
+test("Verify Performance Target and Functional Cookies are Set", async ({
+  page,
+}) => {
   test.setTimeout(120000);
-  
+
   const base = new BasePage(page);
-  await base.handleFeedbackModal();
+  const cookiePage = new CookiePage(page);
 
   await base.open(urls.base);
+
   await base.acceptCookies();
-  const HeaderLogo = page.locator('a[aria-label="Dominion Energylogo"] img[alt="Dominion Energy"]');
-  await HeaderLogo.isVisible();
-  await page.waitForTimeout(2000);
-  HeaderLogo.click();
-  await page.waitForLoadState('domcontentloaded');
 
-  // Wait for cookies to be written
-  //await page.waitForTimeout(3000);
+  // Allow analytics/consent cookies to be generated
+  await page.waitForLoadState("networkidle");
 
-  // Get browser context
-  const context = page.context();
-  await page.waitForTimeout(15000);
-   await page.waitForLoadState('domcontentloaded');
-  // Read cookies (Application tab)
-  const cookies = await context.cookies();
-    await page.waitForTimeout(1000);
+  await page.reload();
 
+  await page.waitForLoadState("networkidle");
 
-  // Only required cookies
-  const targetCookies = ['_clck', '_clsk', '_ga', 'www.dominionenergy.com.cookie'];
+  const requiredCookies = [
+    "_clck",
+    "_clsk",
+    "_ga",
+    "www.dominionenergy.com.cookie",
+  ];
 
-  console.log('--- Cookie Verification ---');
-
-  targetCookies.forEach(name => {
-    const cookie = cookies.find(c => c.name === name);
-    if (cookie) {
-      console.log(`${name}`);
-      console.log(`   Value  : ${cookie.value}`);
-      console.log(`   Domain : ${cookie.domain}`);
-      console.log(`   Path   : ${cookie.path}`);
-    } else {
-      console.log(`${name} NOT FOUND`);
-    }
-  });
+  await cookiePage.verifyCookiesPresent(requiredCookies);
 });

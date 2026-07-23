@@ -5,17 +5,16 @@
   "main": "index.js",
   "scripts": {
     "test:cucumber": "cucumber-js tests/features",
-    "test:playwright": "playwright test"},
+    "test:playwright": "playwright test"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
-  "dependencies": {
-    "@playwright/mcp": "^0.0.47"
-  },
   "devDependencies": {
     "@cucumber/cucumber": "^12.5.0",
     "@playwright/test": "^1.56.1",
-    "@types/node": "^24.10.1"
+    "@types/node": "^24.10.1",
+    "playwright": "^1.56.1"
   }
 }

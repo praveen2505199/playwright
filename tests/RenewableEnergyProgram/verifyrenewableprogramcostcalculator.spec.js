@@ -1,76 +1,39 @@
-const {test,expect} = require('@playwright/test');
-const urls = require('../../config/urls.json');
-const { BasePage } = require('../../pages/basePage');
+const { test } = require("@playwright/test");
+const urls = require("../../config/urls.json");
 
-test('verify Renewable Program Cost Calculator Functionality', async ({ page }) => {
+const { BasePage } = require("../../pages/BasePage");
+const {
+  RenewableCalculatorPage,
+} = require("../../pages/RenewableCalculatorPage");
+
+test("Verify Renewable Program Cost Calculator Functionality", async ({
+  page,
+}) => {
   test.setTimeout(120000);
+
   const base = new BasePage(page);
+  const calculator = new RenewableCalculatorPage(page);
+
   await base.handleFeedbackModal();
-    await base.open(urls.base);
-    await base.acceptCookies();
-    await page.waitForLoadState('load');
-    await page.waitForTimeout(1000);
-    const searchIcon = page.locator("//button[@class='search']");
-    await page.waitForTimeout(2000);
-    //await expect(searchIcon).toBeVisible({ timeout: 1000 });
-    await searchIcon.isEnabled({ timeout: 1000 });
-    await searchIcon.click();
-    await base.handleLocationVirginia();
-    await page.waitForTimeout(1000);
-    await searchIcon.click();
-    const searchInput=page.locator('#search-box-input');
-    await expect(searchInput).toBeVisible({ timeout: 100 });
-    await searchInput.fill('Renewable Programs Cost Calculator');
-    await page.waitForTimeout(100);
-    await searchInput.press('Enter');
-    await page.waitForLoadState('load');
-    await page.waitForTimeout(500);
-   // await page.waitForSelector("//*[@id='coveo01cd4840']//*[@class='coveo-result-list-container coveo-list-layout-container']//*[@class='coveo-list-layout CoveoResult']");
-   await base.CoveoresultIsVisible();
-   const result = page.locator("//a[contains(@class,'CoveoResultLink')]//h4[normalize-space()='Renewable Programs Cost Calculator']");
-    await page.waitForTimeout(5000);
-    await result.scrollIntoViewIfNeeded();
-    await expect(result).toBeVisible();
-   // await base.handleFeedbackModal();
-    await result.click();
-    await page.waitForLoadState('load');
-    await page.waitForTimeout(100);
-    const currentUrl = page.url();
-    if (currentUrl.includes('/virginia/renewable-energy-programs/renewable-energy-101/calculator')) {
-     console.log("Renewable energy calculator page loaded successfully:", currentUrl);
-    }
-     else {console.log("Failed to load the correct page.");}
-     const calculator= page.locator("//section[@id='energy_calculator']//div[@id='ecalc_main']");
-     await calculator.scrollIntoViewIfNeeded();
-     await expect(calculator).toBeVisible();
-     const title1= page.locator("//label[contains(text(), 'Step 1: Select Program')]");
-     await page.waitForTimeout(100);
-     await title1.isVisible();
-     const programDropdown= page.locator("//select[@id='calc_program inputLabel-program']");
-    //  const programValue= page.locator("//*[@class='form-control rounded-0']//*[@value='recSelect']");
-    //  await programDropdown.click();
-    //  await programValue.click();
-     await programDropdown.selectOption('recSelect');
-     await page.waitForTimeout(100);
-     const title2= page.locator("//label[contains(text(), 'Step 2: Choose an Option')]");
-     await page.waitForTimeout(100);
-     await title2.isVisible();
-     const optionDropdown= page.locator("//select[@id='calc_option inputLabel-option']");
-    //  const optionValue= page.locator("//*[@class='form-control rounded-0']//*[@value='block']");
-    //  await optionDropdown.click();
-    //  await optionValue.click();
-    await optionDropdown.selectOption('block');
-     await page.waitForTimeout(100);
-     const caclulatebtn= page.locator("//button[contains(text(), 'Calculate') and not(@disabled)]");
-      await caclulatebtn.click();
-      const resultSection= page.locator("//div[@id='ecalc_main']");
-      await resultSection.scrollIntoViewIfNeeded();
-      const billsummaryprice = page.locator("//span[contains(@class, 'bill-summary-price')]");
-      console.log("Calculated Bill Summary Price:", await billsummaryprice.innerText());
-      const quizbtn = page.locator("//button[contains(text(), 'Take The Quiz')]");
-      await quizbtn.isVisible();
-      console.log("Quiz button is visible after calculation.");
-      const recalculatebtn= page.locator("//a[h6[contains(text(), 'Re-calculate')]]");
-      await recalculatebtn.isVisible();
-      console.log("Re-calculate button is visible after calculation.");
+
+  await base.open(urls.base);
+
+  await base.acceptCookies();
+
+  await calculator.navigateToCalculator(base);
+
+  await calculator.verifyCalculatorDisplayed();
+
+  await calculator.selectProgram("recSelect");
+
+  await calculator.selectOption("block");
+
+  await calculator.clickCalculate();
+
+  await calculator.verifyCalculationResults();
+
+  console.log(
+    "Calculated Bill Summary Price:",
+    await calculator.getBillSummaryPrice(),
+  );
 });

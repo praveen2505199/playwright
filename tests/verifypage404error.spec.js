@@ -1,37 +1,26 @@
-const { test, expect } = require('@playwright/test');
-const { BasePage } = require('../pages/basePage');
+const { test } = require("@playwright/test");
 
-test('Verify 404 Error Page Handling for Random Invalid URL', async ({ page }) => {
-  test.setTimeout(120000);  
+const { BasePage } = require("../pages/basePage");
+const { ErrorPage } = require("../pages/ErrorPage");
+
+test("Verify 404 Error Page Handling for Random Invalid URL", async ({
+  page,
+}) => {
+  test.setTimeout(120000);
+
   const base = new BasePage(page);
+  const errorPage = new ErrorPage(page);
+
   await base.handleFeedbackModal();
-    await base.open();
-    await base.acceptCookies();
 
-  // 2) Build a random path with trailing slash
-  const origin = new URL(page.url()).origin;
-  const randomSlug = `random-${Math.random().toString(36).slice(2, 10)}`;
-  const testUrl = `${origin}/${randomSlug}`;
+  await base.open();
 
-  // 3) Navigate to the random path and capture the response
-  const response = await page.goto(testUrl, { waitUntil: 'load' });
+  await base.acceptCookies();
 
-  // 4) Fetch page title and network status
-  const title = await page.title();
-  const status = response ? response.status() : null;
+  const result = await errorPage.navigateToRandomInvalidUrl();
 
-  console.log(`Test URL: ${testUrl}`);
-  console.log(`Response status: ${status}`);
-  console.log(`Page title: ${title}`);
+  console.log("Test URL:", result.url);
+  console.log("Response Status:", result.status);
 
-  // 5) Verify title indicates a not-found page (case-insensitive)
-expect(title).toMatch(/Page Not Found \| Dominion Energy/);
-
-  // 6) Verify network status is an error (prefer 404, allow any 4xx/5xx)
-  if (status !== null) {
-    expect(status).toBeGreaterThanOrEqual(400);
-  } else {
-    // If no response available, at minimum rely on the title check above
-    test.info().annotations.push({ type: 'warning', description: 'No network response available; asserted using title only.' });
-  }
+  await errorPage.verify404Page(result.status);
 });
